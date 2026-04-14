@@ -153,20 +153,20 @@ async function initDB() {
 }
 initDB();
 
-// (Mantenha todas as rotas da API exatamente como estavam no server.js anterior)
-// ... eu vou repeti-las aqui para completude, mas você pode manter as que já tem.
-// Para economizar espaço, as rotas são idênticas às que você já tem. Vou colocar um resumo:
+// ========== ROTAS DA API ==========
 
 app.get('/api/trees', async (req, res) => {
   const result = await pool.query('SELECT id, name FROM skill_trees ORDER BY id');
   res.json(result.rows);
 });
+
 app.post('/api/trees/verify', async (req, res) => {
   const { treeId, password } = req.body;
   const result = await pool.query('SELECT password FROM skill_trees WHERE id = $1', [treeId]);
   if (result.rows.length === 0) return res.status(404).json({ error: 'Árvore não existe' });
   res.json({ valid: result.rows[0].password === password });
 });
+
 app.get('/api/trees/:id/perks', async (req, res) => {
   const treeId = req.params.id;
   const perks = await pool.query(`
@@ -180,6 +180,7 @@ app.get('/api/trees/:id/perks', async (req, res) => {
   const points = await pool.query('SELECT available_points FROM player WHERE id = 1');
   res.json({ perks: perks.rows, availablePoints: points.rows[0].available_points });
 });
+
 app.post('/api/purchase', async (req, res) => {
   const { perkId } = req.body;
   const client = await pool.connect();
@@ -207,40 +208,48 @@ app.post('/api/purchase', async (req, res) => {
     client.release();
   }
 });
+
 app.post('/api/admin/add-points', async (req, res) => {
   const { amount } = req.body;
   await pool.query('UPDATE player SET available_points = available_points + $1 WHERE id = 1', [amount]);
   const newPoints = await pool.query('SELECT available_points FROM player WHERE id = 1');
   res.json({ availablePoints: newPoints.rows[0].available_points });
 });
+
 app.post('/api/admin/remove-points', async (req, res) => {
   const { amount } = req.body;
   await pool.query('UPDATE player SET available_points = available_points - $1 WHERE id = 1', [amount]);
   const newPoints = await pool.query('SELECT available_points FROM player WHERE id = 1');
   res.json({ availablePoints: newPoints.rows[0].available_points });
 });
+
 app.post('/api/admin/reset-perks', async (req, res) => {
   await pool.query('DELETE FROM purchased_perks WHERE player_id = 1');
   res.json({ success: true });
 });
+
 app.get('/api/admin/trees', async (req, res) => {
   const result = await pool.query('SELECT * FROM skill_trees ORDER BY id');
   res.json(result.rows);
 });
+
 app.post('/api/admin/trees', async (req, res) => {
   const { name, password } = req.body;
   const result = await pool.query('INSERT INTO skill_trees (name, password) VALUES ($1, $2) RETURNING *', [name, password]);
   res.json(result.rows[0]);
 });
+
 app.put('/api/admin/trees/:id', async (req, res) => {
   const { name, password } = req.body;
   await pool.query('UPDATE skill_trees SET name = $1, password = $2 WHERE id = $3', [name, password, req.params.id]);
   res.json({ success: true });
 });
+
 app.delete('/api/admin/trees/:id', async (req, res) => {
   await pool.query('DELETE FROM skill_trees WHERE id = $1', [req.params.id]);
   res.json({ success: true });
 });
+
 app.get('/api/admin/perks', async (req, res) => {
   const result = await pool.query(`
     SELECT p.*, t.name as tree_name 
@@ -250,6 +259,7 @@ app.get('/api/admin/perks', async (req, res) => {
   `);
   res.json(result.rows);
 });
+
 app.post('/api/admin/perks', async (req, res) => {
   const { tree_id, name, description, cost, pos_x, pos_y, required_perk_id } = req.body;
   const result = await pool.query(
@@ -259,6 +269,7 @@ app.post('/api/admin/perks', async (req, res) => {
   );
   res.json(result.rows[0]);
 });
+
 app.put('/api/admin/perks/:id', async (req, res) => {
   const { name, description, cost, pos_x, pos_y, required_perk_id } = req.body;
   await pool.query(
@@ -268,6 +279,7 @@ app.put('/api/admin/perks/:id', async (req, res) => {
   );
   res.json({ success: true });
 });
+
 app.delete('/api/admin/perks/:id', async (req, res) => {
   await pool.query('DELETE FROM perks WHERE id = $1', [req.params.id]);
   res.json({ success: true });
