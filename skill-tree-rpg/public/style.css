@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinema+Night&family=Cinzel:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap');
 
 * {
     margin: 0;
@@ -17,7 +17,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Fundo estrelado com animação e nebulosas */
+/* Fundo estrelado */
 .stars {
     position: fixed;
     top: 0;
@@ -25,7 +25,6 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    background: transparent;
     z-index: 0;
 }
 .stars::before, .stars::after {
@@ -53,7 +52,7 @@ body {
     to { transform: translateY(-2000px); }
 }
 
-/* Efeito de aurora / névoa */
+/* Efeito aurora */
 body::before {
     content: '';
     position: fixed;
@@ -168,7 +167,6 @@ h1 {
     box-shadow: 0 0 12px #d4af37;
 }
 
-/* Modais com estilo medieval */
 .modal {
     display: none;
     position: fixed;
@@ -229,7 +227,7 @@ h1 {
     font-weight: bold;
 }
 
-button, .tree-card button {
+button {
     background: #2a2418;
     border: 1px solid #d4af37;
     padding: 8px 18px;
