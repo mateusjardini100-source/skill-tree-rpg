@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árvore de Habilidades - Skyrim Style</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="container">
+        <h1>🌲 Árvores de Habilidade 🌲</h1>
+        <div id="trees-list" class="trees-grid"></div>
+        <button id="admin-btn" class="admin-btn">👑 Admin</button>
+    </div>
+
+    <!-- Modal para senha da árvore -->
+    <div id="tree-password-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Acesso à Árvore</h2>
+            <input type="password" id="tree-password" placeholder="Senha da árvore">
+            <button id="submit-tree-password">Entrar</button>
+        </div>
+    </div>
+
+    <!-- Modal da árvore (exibição dos perks) -->
+    <div id="tree-view-modal" class="modal tree-view">
+        <div class="modal-content large">
+            <span class="close">&times;</span>
+            <div id="tree-header">
+                <h2 id="tree-name"></h2>
+                <div class="points-display">Pontos disponíveis: <span id="points">0</span></div>
+            </div>
+            <div id="skill-canvas-container">
+                <canvas id="skillCanvas" width="800" height="600"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal do Admin -->
+    <div id="admin-modal" class="modal">
+        <div class="modal-content large">
+            <span class="close">&times;</span>
+            <h2>🔧 Painel Admin</h2>
+            <input type="password" id="admin-password" placeholder="Senha do Admin">
+            <button id="login-admin">Login</button>
+            <div id="admin-panel" style="display: none;">
+                <hr>
+                <h3>Gerenciar Pontos</h3>
+                <button id="add-points">+5 Pontos</button>
+                <button id="remove-points">-5 Pontos</button>
+                <button id="reset-perks">Resetar todos os perks</button>
+                <hr>
+                <h3>Árvores</h3>
+                <div id="admin-trees-list"></div>
+                <button id="new-tree-btn">➕ Nova Árvore</button>
+                <hr>
+                <h3>Perks</h3>
+                <div id="admin-perks-list"></div>
+                <button id="new-perk-btn">➕ Novo Perk</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para criar/editar árvore -->
+    <div id="tree-form-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="tree-form-title">Nova Árvore</h3>
+            <input type="text" id="tree-name-input" placeholder="Nome da árvore">
+            <input type="text" id="tree-password-input" placeholder="Senha">
+            <button id="save-tree-btn">Salvar</button>
+        </div>
+    </div>
+
+    <!-- Modal para criar/editar perk -->
+    <div id="perk-form-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="perk-form-title">Novo Perk</h3>
+            <select id="perk-tree-select"></select>
+            <input type="text" id="perk-name" placeholder="Nome do perk">
+            <textarea id="perk-desc" placeholder="Descrição"></textarea>
+            <input type="number" id="perk-cost" placeholder="Custo em pontos" value="1">
+            <input type="number" id="perk-pos-x" placeholder="Posição X (0-800)">
+            <input type="number" id="perk-pos-y" placeholder="Posição Y (0-600)">
+            <select id="perk-required"></select>
+            <button id="save-perk-btn">Salvar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
