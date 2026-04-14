@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinema+Night&family=Cinzel:wght@400;700;900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -6,13 +8,16 @@
 }
 
 body {
-    font-family: 'Segoe UI', 'Arial', sans-serif;
-    background: radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%);
+    font-family: 'Cinzel', 'Segoe UI', serif;
+    background: radial-gradient(ellipse at bottom, #0a0f1a 0%, #03060b 100%);
     min-height: 100vh;
-    color: #f0f0f0;
+    color: #e6d5a8;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    position: relative;
+    overflow-x: hidden;
 }
 
-/* Fundo estrelado animado */
+/* Fundo estrelado com animação e nebulosas */
 .stars {
     position: fixed;
     top: 0;
@@ -20,160 +25,236 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    background: transparent url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==') repeat;
-    animation: moveStars 200s linear infinite;
-    opacity: 0.4;
+    background: transparent;
+    z-index: 0;
 }
-
-@keyframes moveStars {
+.stars::before, .stars::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
+                      radial-gradient(1px 1px at 80px 200px, #f8d57e, rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    opacity: 0.6;
+    animation: starMove 80s linear infinite;
+}
+.stars::after {
+    background-size: 150px 150px;
+    opacity: 0.4;
+    animation-duration: 120s;
+    animation-direction: reverse;
+}
+@keyframes starMove {
     from { transform: translateY(0); }
     to { transform: translateY(-2000px); }
 }
 
+/* Efeito de aurora / névoa */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(30,80,120,0.15) 0%, rgba(0,0,0,0) 70%);
+    pointer-events: none;
+    z-index: 0;
+    animation: aurora 20s infinite alternate;
+}
+@keyframes aurora {
+    0% { opacity: 0.3; transform: translate(0,0);}
+    100% { opacity: 0.7; transform: translate(5%, 5%);}
+}
+
 .container {
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 30px 20px;
     position: relative;
     z-index: 2;
 }
 
 h1 {
     text-align: center;
-    font-size: 2.5rem;
-    text-shadow: 0 0 10px #ffb347;
-    margin-bottom: 40px;
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #e6c87a, #b88b2c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.3), 0 0 15px rgba(212,175,55,0.5);
+    margin-bottom: 50px;
+    border-bottom: 2px solid #d4af37;
+    display: inline-block;
+    width: auto;
+    padding-bottom: 15px;
 }
 
 .trees-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
 }
 
 .tree-card {
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
+    background: rgba(10, 15, 26, 0.85);
+    backdrop-filter: blur(8px);
     border: 2px solid #d4af37;
-    border-radius: 15px;
-    padding: 20px;
+    border-radius: 20px;
+    padding: 25px 15px;
     text-align: center;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
 }
-
+.tree-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent);
+    transition: left 0.5s;
+}
+.tree-card:hover::before {
+    left: 100%;
+}
 .tree-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+    transform: translateY(-8px) scale(1.02);
     border-color: #ffd966;
+    box-shadow: 0 20px 35px -8px rgba(212,175,55,0.4);
 }
-
 .tree-card h3 {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
+    font-size: 2rem;
+    margin-bottom: 12px;
     color: #ffd966;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+.tree-card p {
+    color: #b9ad7a;
+    font-style: italic;
 }
 
 .admin-btn {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #2c3e50;
-    color: white;
-    border: none;
+    bottom: 25px;
+    right: 25px;
+    background: #2c2e3a;
+    border: 1px solid #c4a747;
+    color: #efd48b;
     border-radius: 50px;
-    padding: 12px 20px;
-    cursor: pointer;
+    padding: 12px 24px;
     font-weight: bold;
-    z-index: 10;
-    box-shadow: 0 2px 10px black;
+    cursor: pointer;
+    z-index: 100;
+    font-family: 'Cinzel', serif;
+    backdrop-filter: blur(5px);
+    transition: all 0.2s;
 }
-
 .admin-btn:hover {
-    background: #e67e22;
+    background: #4a3b1c;
+    color: #fff2c4;
+    box-shadow: 0 0 12px #d4af37;
 }
 
-/* Modais */
+/* Modais com estilo medieval */
 .modal {
     display: none;
     position: fixed;
-    z-index: 100;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.8);
-    backdrop-filter: blur(5px);
+    background-color: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
 }
-
 .modal-content {
-    background: #1e2a2e;
+    background: #131a22;
     margin: 5% auto;
     padding: 25px;
-    border-radius: 20px;
+    border-radius: 30px;
     width: 90%;
-    max-width: 500px;
-    color: #eee;
-    border: 1px solid #d4af37;
+    max-width: 550px;
+    border: 2px ridge #d4af37;
+    box-shadow: 0 0 30px rgba(212,175,55,0.3);
+    color: #f0e6c5;
+    font-family: 'Cinzel', serif;
 }
-
 .modal-content.large {
-    max-width: 900px;
+    max-width: 1000px;
 }
-
 .close {
     float: right;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: bold;
+    color: #aa8c54;
     cursor: pointer;
-    color: #aaa;
+    transition: 0.2s;
 }
-
 .close:hover {
-    color: white;
+    color: #e6c87a;
+    text-shadow: 0 0 5px gold;
 }
 
 #skillCanvas {
-    background: #0a0f1a;
-    border-radius: 15px;
-    border: 2px solid #d4af37;
+    background: #070b10;
+    border-radius: 20px;
+    border: 3px solid #c4a747;
     width: 100%;
     height: auto;
     cursor: pointer;
+    box-shadow: 0 0 25px rgba(0,0,0,0.7);
 }
 
 .points-display {
-    font-size: 1.3rem;
-    margin: 10px 0;
+    font-size: 1.5rem;
     background: #000000aa;
+    backdrop-filter: blur(4px);
     display: inline-block;
-    padding: 5px 15px;
-    border-radius: 30px;
-}
-
-button {
-    background: #d4af37;
-    border: none;
-    padding: 8px 16px;
-    margin: 5px;
-    border-radius: 8px;
+    padding: 6px 20px;
+    border-radius: 40px;
+    border-left: 4px solid gold;
     font-weight: bold;
-    cursor: pointer;
-    transition: 0.1s;
 }
 
+button, .tree-card button {
+    background: #2a2418;
+    border: 1px solid #d4af37;
+    padding: 8px 18px;
+    margin: 5px;
+    border-radius: 30px;
+    font-weight: bold;
+    color: #f3e5ab;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: 'Cinzel', serif;
+}
 button:hover {
-    background: #ffd966;
+    background: #4a3e28;
+    border-color: #ffea80;
     transform: scale(1.02);
+    box-shadow: 0 0 8px gold;
 }
 
 input, select, textarea {
-    width: 100%;
-    padding: 8px;
+    background: #1e242c;
+    border: 1px solid #b88d3a;
+    color: #f0e2b6;
+    border-radius: 12px;
+    padding: 10px;
     margin: 8px 0;
-    background: #2c3e50;
-    border: 1px solid #d4af37;
-    color: white;
-    border-radius: 8px;
+    width: 100%;
+    font-family: inherit;
 }
