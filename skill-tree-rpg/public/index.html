@@ -2,91 +2,88 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Árvore de Habilidades - Skyrim Style</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Skyrim Skill Tree Editor</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="stars"></div>
+    <div class="aurora"></div>
     <div class="container">
-        <h1>🌲 Árvores de Habilidade 🌲</h1>
+        <h1>🌲 ÁRVORES DE HABILIDADE 🌲</h1>
         <div id="trees-list" class="trees-grid"></div>
         <button id="admin-btn" class="admin-btn">👑 Admin</button>
     </div>
 
-    <!-- Modal para senha da árvore -->
+    <!-- Modal de senha da árvore -->
     <div id="tree-password-modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content glass">
             <span class="close">&times;</span>
-            <h2>Acesso à Árvore</h2>
+            <h2>🔐 Acesso à Árvore</h2>
             <input type="password" id="tree-password" placeholder="Senha da árvore">
             <button id="submit-tree-password">Entrar</button>
         </div>
     </div>
 
-    <!-- Modal da árvore (exibição dos perks) -->
+    <!-- Modal da árvore (visualização/edição) -->
     <div id="tree-view-modal" class="modal tree-view">
-        <div class="modal-content large">
+        <div class="modal-content large glass">
             <span class="close">&times;</span>
             <div id="tree-header">
                 <h2 id="tree-name"></h2>
-                <div class="points-display">Pontos disponíveis: <span id="points">0</span></div>
+                <div class="points-display">💠 Pontos: <span id="points">0</span></div>
+                <div id="editor-tools" style="display: none;">
+                    <button id="toggle-connect-mode" class="tool-btn">🔗 Conectar</button>
+                    <button id="cancel-connect" class="tool-btn" style="display:none;">Cancelar</button>
+                    <span id="connect-status" style="margin-left: 10px;"></span>
+                </div>
             </div>
             <div id="skill-canvas-container">
-                <canvas id="skillCanvas" width="800" height="600"></canvas>
+                <canvas id="skillCanvas" width="900" height="650"></canvas>
+                <div id="canvas-tools" style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.5); border-radius: 8px; padding: 5px;">
+                    <button id="zoom-in" class="small-btn">🔍+</button>
+                    <button id="zoom-out" class="small-btn">🔍-</button>
+                    <button id="reset-view" class="small-btn">⟳</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal do Admin -->
+    <!-- Modal Admin (senha e painel) -->
     <div id="admin-modal" class="modal">
-        <div class="modal-content large">
+        <div class="modal-content glass">
             <span class="close">&times;</span>
             <h2>🔧 Painel Admin</h2>
             <input type="password" id="admin-password" placeholder="Senha do Admin">
             <button id="login-admin">Login</button>
-            <div id="admin-panel" style="display: none;">
-                <hr>
+            <div id="admin-panel" style="display: none; margin-top: 20px;">
                 <h3>Gerenciar Pontos</h3>
                 <button id="add-points">+5 Pontos</button>
                 <button id="remove-points">-5 Pontos</button>
-                <button id="reset-perks">Resetar todos os perks</button>
+                <button id="reset-perks">Resetar perks</button>
                 <hr>
                 <h3>Árvores</h3>
                 <div id="admin-trees-list"></div>
                 <button id="new-tree-btn">➕ Nova Árvore</button>
                 <hr>
-                <h3>Perks</h3>
+                <h3>Perks (edição visual disponível na árvore)</h3>
                 <div id="admin-perks-list"></div>
-                <button id="new-perk-btn">➕ Novo Perk</button>
+                <button id="new-perk-btn">➕ Novo Perk (posicionar depois)</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal para criar/editar árvore -->
-    <div id="tree-form-modal" class="modal">
-        <div class="modal-content">
+    <!-- Modal para edição rápida de perk -->
+    <div id="quick-perk-modal" class="modal">
+        <div class="modal-content glass">
             <span class="close">&times;</span>
-            <h3 id="tree-form-title">Nova Árvore</h3>
-            <input type="text" id="tree-name-input" placeholder="Nome da árvore">
-            <input type="text" id="tree-password-input" placeholder="Senha">
-            <button id="save-tree-btn">Salvar</button>
-        </div>
-    </div>
-
-    <!-- Modal para criar/editar perk -->
-    <div id="perk-form-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3 id="perk-form-title">Novo Perk</h3>
-            <select id="perk-tree-select"></select>
-            <input type="text" id="perk-name" placeholder="Nome do perk">
-            <textarea id="perk-desc" placeholder="Descrição"></textarea>
-            <input type="number" id="perk-cost" placeholder="Custo em pontos" value="1">
-            <input type="number" id="perk-pos-x" placeholder="Posição X (0-800)">
-            <input type="number" id="perk-pos-y" placeholder="Posição Y (0-600)">
-            <select id="perk-required"></select>
-            <button id="save-perk-btn">Salvar</button>
+            <h3 id="quick-perk-title">Editar Perk</h3>
+            <input type="text" id="quick-perk-name" placeholder="Nome">
+            <textarea id="quick-perk-desc" placeholder="Descrição"></textarea>
+            <input type="number" id="quick-perk-cost" placeholder="Custo">
+            <select id="quick-perk-required"></select>
+            <button id="save-quick-perk">Salvar</button>
+            <button id="delete-quick-perk" style="background: #8b3c2a;">Excluir</button>
         </div>
     </div>
 
